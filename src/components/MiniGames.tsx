@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Palette, Film, Grid3X3, Trophy, Star } from 'lucide-react';
+import { Palette, Film, Grid3X3, Trophy, Star, Gamepad2 } from 'lucide-react';
 import GuessTheArtist from './games/GuessTheArtist';
 import GuessTheMovie from './games/GuessTheMovie';
 import BollywoodWordle from './games/BollywoodWordle';
@@ -20,24 +20,24 @@ const MiniGames: React.FC<MiniGamesProps> = ({ onGameComplete }) => {
       title: 'Guess the Artist',
       description: 'Test your knowledge of famous paintings and their creators',
       icon: Palette,
-      color: 'from-purple-500 to-pink-500',
-      bgColor: 'bg-purple-100'
+      color: 'from-red-600 to-red-800',
+      bgColor: 'bg-red-800/20'
     },
     {
       id: 'movie',
       title: 'Guess the Movie',
       description: 'Identify Bollywood classics from iconic scenes',
       icon: Film,
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'bg-blue-100'
+      color: 'from-amber-600 to-red-700',
+      bgColor: 'bg-amber-800/20'
     },
     {
       id: 'wordle',
       title: 'Bollywood Wordle',
       description: 'Solve Bollywood-themed word puzzles',
       icon: Grid3X3,
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'bg-green-100'
+      color: 'from-red-700 to-amber-700',
+      bgColor: 'bg-red-700/20'
     }
   ];
 
@@ -77,30 +77,43 @@ const MiniGames: React.FC<MiniGamesProps> = ({ onGameComplete }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 py-16 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-amber-900 py-16 px-4 relative overflow-hidden">
+      {/* Ornate Pattern Background */}
+      <div className="absolute inset-0 opacity-10">
+        <div 
+          className="w-full h-full"
+          style={{
+            backgroundImage: `url('/assets/mandala pattern.svg')`,
+            backgroundSize: '400px 400px',
+            backgroundRepeat: 'repeat'
+          }}
+        />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="max-w-6xl mx-auto"
+        className="max-w-6xl mx-auto relative z-10"
       >
         {/* Header */}
         <div className="text-center mb-16">
           <motion.h2 
-            className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4"
+            className="text-5xl md:text-6xl font-bold font-serif text-gold-400 mb-4 flex items-center justify-center gap-4"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
+            <Gamepad2 className="w-16 h-16" />
             Game Zone
           </motion.h2>
           <motion.p 
-            className="text-xl text-gray-600 mb-8"
+            className="text-xl text-gold-200 mb-8 max-w-2xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            Challenge yourself with these delightful games!
+            Challenge yourself with these delightful games crafted just for you!
           </motion.p>
 
           {/* Score Display */}
@@ -108,13 +121,13 @@ const MiniGames: React.FC<MiniGamesProps> = ({ onGameComplete }) => {
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-3 bg-yellow-100 px-6 py-3 rounded-full"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-red-800/80 to-amber-800/80 backdrop-blur-sm px-8 py-4 rounded-full border-2 border-gold-400/50"
             >
-              <Trophy className="w-6 h-6 text-yellow-600" />
-              <span className="font-bold text-yellow-800">Total Score: {totalScore}</span>
+              <Trophy className="w-8 h-8 text-gold-400" />
+              <span className="font-bold text-gold-400 text-xl">Total Score: {totalScore}</span>
               <div className="flex gap-1">
                 {completedGames.map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-yellow-500 fill-current" />
+                  <Star key={i} className="w-6 h-6 text-gold-400 fill-current" />
                 ))}
               </div>
             </motion.div>
@@ -136,49 +149,55 @@ const MiniGames: React.FC<MiniGamesProps> = ({ onGameComplete }) => {
                 className="relative group"
               >
                 <div className={`
-                  ${game.bgColor} p-8 rounded-3xl shadow-xl hover:shadow-2xl 
-                  transition-all duration-500 cursor-pointer border-4 border-transparent
-                  hover:border-opacity-30 group-hover:scale-105
-                  ${isCompleted ? 'ring-4 ring-yellow-400 ring-opacity-50' : ''}
+                  bg-gradient-to-br from-red-800/90 to-red-900/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl hover:shadow-3xl 
+                  transition-all duration-500 cursor-pointer border-2 border-gold-400/30
+                  hover:border-gold-400 group-hover:scale-105
+                  ${isCompleted ? 'ring-4 ring-gold-400/50' : ''}
                 `}
                 onClick={() => handleGameSelect(game.id)}
-                >
-                  {/* Completion Badge */}
-                  {isCompleted && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute -top-3 -right-3 bg-yellow-400 rounded-full p-2 shadow-lg"
-                    >
-                      <Trophy className="w-6 h-6 text-yellow-800" />
-                    </motion.div>
-                  )}
-
-                  {/* Game Icon */}
+                style={{ perspective: 1000 }}
+              >
+                {/* Completion Badge */}
+                {isCompleted && (
                   <motion.div
-                    className={`w-20 h-20 rounded-2xl bg-gradient-to-r ${game.color} flex items-center justify-center mb-6 mx-auto group-hover:rotate-12 transition-transform duration-300`}
-                    whileHover={{ scale: 1.1 }}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -top-3 -right-3 bg-gold-400 rounded-full p-3 shadow-lg border-2 border-red-800"
                   >
-                    <IconComponent className="w-10 h-10 text-white" />
+                    <Trophy className="w-6 h-6 text-red-800" />
                   </motion.div>
+                )}
 
-                  {/* Game Info */}
-                  <h3 className="text-2xl font-bold text-gray-800 mb-3 text-center">
-                    {game.title}
-                  </h3>
-                  <p className="text-gray-600 text-center leading-relaxed">
-                    {game.description}
-                  </p>
+                {/* Decorative corners */}
+                <div className="absolute top-4 left-4 w-4 h-4 border-l-2 border-t-2 border-gold-400/50" />
+                <div className="absolute top-4 right-4 w-4 h-4 border-r-2 border-t-2 border-gold-400/50" />
+                <div className="absolute bottom-4 left-4 w-4 h-4 border-l-2 border-b-2 border-gold-400/50" />
+                <div className="absolute bottom-4 right-4 w-4 h-4 border-r-2 border-b-2 border-gold-400/50" />
 
-                  {/* Play Button */}
-                  <motion.button
-                    className={`w-full mt-6 py-3 rounded-xl bg-gradient-to-r ${game.color} text-white font-semibold hover:shadow-lg transition-all duration-300`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {isCompleted ? 'Play Again' : 'Start Game'}
-                  </motion.button>
-                </div>
+                {/* Game Icon */}
+                <motion.div
+                  className={`w-24 h-24 rounded-2xl bg-gradient-to-r ${game.color} flex items-center justify-center mb-6 mx-auto group-hover:rotate-12 transition-transform duration-300 shadow-xl`}
+                  whileHover={{ scale: 1.1 }}
+                >
+                  <IconComponent className="w-12 h-12 text-gold-200" />
+                </motion.div>
+
+                {/* Game Info */}
+                <h3 className="text-2xl font-bold text-gold-400 mb-3 text-center font-serif">
+                  {game.title}
+                </h3>
+                <p className="text-gold-200 text-center leading-relaxed mb-6">
+                  {game.description}
+                </p>
+
+                {/* Play Button */}
+                <motion.button
+                  className={`w-full py-4 rounded-xl bg-gradient-to-r ${game.color} text-gold-200 font-semibold hover:shadow-lg transition-all duration-300 border border-gold-400/30 hover:border-gold-400`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {isCompleted ? 'Play Again' : 'Start Game'}
+                </motion.button>
               </motion.div>
             );
           })}
@@ -189,18 +208,18 @@ const MiniGames: React.FC<MiniGamesProps> = ({ onGameComplete }) => {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-center mt-16 p-8 bg-gradient-to-r from-yellow-100 to-pink-100 rounded-3xl"
+            className="text-center mt-16 p-8 bg-gradient-to-r from-red-800/90 to-amber-800/90 backdrop-blur-sm rounded-3xl border-2 border-gold-400/50"
           >
             <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-3xl font-bold text-gray-800 mb-4">
+            <h3 className="text-3xl font-bold text-gold-400 mb-4 font-serif">
               Congratulations, Mum!
             </h3>
-            <p className="text-xl text-gray-600">
-              You've completed all the games! Your total score is <span className="font-bold text-yellow-600">{totalScore}</span>
+            <p className="text-xl text-gold-200">
+              You've mastered all the games! Your total score is <span className="font-bold text-gold-400">{totalScore}</span>
             </p>
             <div className="flex justify-center gap-2 mt-4">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-8 h-8 text-yellow-500 fill-current" />
+                <Star key={i} className="w-8 h-8 text-gold-400 fill-current" />
               ))}
             </div>
           </motion.div>
