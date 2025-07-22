@@ -21,7 +21,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentSection, onSectionChange
       animate={{ y: 0 }}
       className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
     >
-      <div className="bg-white/90 backdrop-blur-lg rounded-full px-2 py-2 shadow-2xl border border-white/20">
+      <div className="bg-gradient-to-r from-red-600 to-red-800 backdrop-blur-lg rounded-full px-2 py-2 shadow-2xl border border-red-400/20">
         <div className="flex items-center gap-1">
           {navItems.map((item) => {
             const IconComponent = item.icon;
@@ -34,7 +34,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentSection, onSectionChange
                 className={`relative px-4 py-3 rounded-full transition-all duration-300 flex items-center gap-2 ${
                   isActive
                     ? 'text-white'
-                    : 'text-gray-600 hover:text-purple-600'
+                    : 'text-gray-200 hover:text-red-300'
                 }`}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -42,7 +42,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentSection, onSectionChange
                 {isActive && (
                   <motion.div
                     layoutId="activeBackground"
-                    className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full"
+                    className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-700 rounded-full"
                     transition={{ duration: 0.3 }}
                   />
                 )}
