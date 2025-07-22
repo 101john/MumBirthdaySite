@@ -34,7 +34,7 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack }) => {
   const [wordsData] = useState<WordData[]>(parseWordsData());
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentWordIndex, setCurrentWordIndex] = useState(() => Math.floor(Math.random() * wordsData.length));
   const [currentGuess, setCurrentGuess] = useState('');
   const [guesses, setGuesses] = useState<string[]>([]);
   const [gameWon, setGameWon] = useState(false);
@@ -70,22 +70,31 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
     const newGuesses = [...guesses, currentGuess];
     setGuesses(newGuesses);
 
-    // Update used letters
     const newUsedLetters = { ...usedLetters };
-    for (let i = 0; i < currentGuess.length; i++) {
-      const letter = currentGuess[i];
-      if (currentWordData.word[i] === letter) {
+    const targetWordArray = currentWordData.word.split('');
+    const guessArray = currentGuess.split('');
+
+    // First pass: mark greens
+    guessArray.forEach((letter, index) => {
+      if (targetWordArray[index] === letter) {
         newUsedLetters[letter] = 'correct';
-      } else if (currentWordData.word.includes(letter)) {
-        if (newUsedLetters[letter] !== 'correct') {
+        targetWordArray[index] = ''; // Mark as used
+      }
+    });
+
+    // Second pass: mark yellows and greys
+    guessArray.forEach((letter) => {
+      if (newUsedLetters[letter] !== 'correct') {
+        const letterIndex = targetWordArray.indexOf(letter);
+        if (letterIndex !== -1) {
           newUsedLetters[letter] = 'present';
-        }
-      } else {
-        if (!newUsedLetters[letter]) {
+          targetWordArray[letterIndex] = ''; // Mark as used
+        } else {
           newUsedLetters[letter] = 'absent';
         }
       }
-    }
+    });
+
     setUsedLetters(newUsedLetters);
 
     if (currentGuess === currentWordData.word) {
@@ -101,7 +110,7 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
 
   const handleNextWord = () => {
     if (currentWordIndex < wordsData.length - 1) {
-      setCurrentWordIndex(currentWordIndex + 1);
+      setCurrentWordIndex(Math.floor(Math.random() * wordsData.length));
       resetGame();
     } else {
       setAllWordsComplete(true);
