@@ -34,7 +34,7 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack }) => {
   const [wordsData] = useState<WordData[]>(parseWordsData());
-  const [currentWordIndex, setCurrentWordIndex] = useState(() => Math.floor(Math.random() * wordsData.length));
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentGuess, setCurrentGuess] = useState('');
   const [guesses, setGuesses] = useState<string[]>([]);
   const [gameWon, setGameWon] = useState(false);
@@ -42,6 +42,7 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
   const [score, setScore] = useState(0);
   const [allWordsComplete, setAllWordsComplete] = useState(false);
   const [usedLetters, setUsedLetters] = useState<Record<string, 'correct' | 'present' | 'absent'>>({});
+  const [guessEvaluations, setGuessEvaluations] = useState<Array<Array<'correct' | 'present' | 'absent'>>>([]);
 
   const currentWordData = wordsData[currentWordIndex];
   const maxGuesses = 6;
@@ -52,6 +53,40 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
     setGameWon(false);
     setGameLost(false);
     setUsedLetters({});
+    setGuessEvaluations([]);
+  };
+
+  const evaluateGuess = (guess: string, targetWord: string) => {
+    const result: Array<'correct' | 'present' | 'absent'> = [];
+    const targetLetters = targetWord.split('');
+    const guessLetters = guess.split('');
+    
+    // First pass: mark correct letters
+    const remainingTargetLetters = [...targetLetters];
+    const remainingGuessLetters = [...guessLetters];
+    
+    for (let i = 0; i < 5; i++) {
+      if (guessLetters[i] === targetLetters[i]) {
+        result[i] = 'correct';
+        remainingTargetLetters[i] = '';
+        remainingGuessLetters[i] = '';
+      }
+    }
+    
+    // Second pass: mark present letters
+    for (let i = 0; i < 5; i++) {
+      if (remainingGuessLetters[i] !== '') {
+        const letterIndex = remainingTargetLetters.indexOf(remainingGuessLetters[i]);
+        if (letterIndex !== -1) {
+          result[i] = 'present';
+          remainingTargetLetters[letterIndex] = '';
+        } else {
+          result[i] = 'absent';
+        }
+      }
+    }
+    
+    return result;
   };
 
   const handleKeyPress = (letter: string) => {
@@ -70,31 +105,24 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
     const newGuesses = [...guesses, currentGuess];
     setGuesses(newGuesses);
 
+    // Evaluate the guess
+    const evaluation = evaluateGuess(currentGuess, currentWordData.word);
+    const newEvaluations = [...guessEvaluations, evaluation];
+    setGuessEvaluations(newEvaluations);
+
+    // Update used letters based on the best result for each letter
     const newUsedLetters = { ...usedLetters };
-    const targetWordArray = currentWordData.word.split('');
-    const guessArray = currentGuess.split('');
-
-    // First pass: mark greens
-    guessArray.forEach((letter, index) => {
-      if (targetWordArray[index] === letter) {
-        newUsedLetters[letter] = 'correct';
-        targetWordArray[index] = ''; // Mark as used
+    for (let i = 0; i < currentGuess.length; i++) {
+      const letter = currentGuess[i];
+      const currentEval = evaluation[i];
+      
+      // Only update if we don't have a better evaluation for this letter
+      if (!newUsedLetters[letter] || 
+          (newUsedLetters[letter] === 'absent' && currentEval !== 'absent') ||
+          (newUsedLetters[letter] === 'present' && currentEval === 'correct')) {
+        newUsedLetters[letter] = currentEval;
       }
-    });
-
-    // Second pass: mark yellows and greys
-    guessArray.forEach((letter) => {
-      if (newUsedLetters[letter] !== 'correct') {
-        const letterIndex = targetWordArray.indexOf(letter);
-        if (letterIndex !== -1) {
-          newUsedLetters[letter] = 'present';
-          targetWordArray[letterIndex] = ''; // Mark as used
-        } else {
-          newUsedLetters[letter] = 'absent';
-        }
-      }
-    });
-
+    }
     setUsedLetters(newUsedLetters);
 
     if (currentGuess === currentWordData.word) {
@@ -110,7 +138,7 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
 
   const handleNextWord = () => {
     if (currentWordIndex < wordsData.length - 1) {
-      setCurrentWordIndex(Math.floor(Math.random() * wordsData.length));
+      setCurrentWordIndex(currentWordIndex + 1);
       resetGame();
     } else {
       setAllWordsComplete(true);
@@ -118,9 +146,8 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
     }
   };
 
-  const getLetterStyle = (letter: string) => {
-    const status = usedLetters[letter];
-    switch (status) {
+  const getLetterStyle = (letter: string, evaluation: 'correct' | 'present' | 'absent') => {
+    switch (evaluation) {
       case 'correct':
         return 'bg-green-600 text-white border-green-500 shadow-lg';
       case 'present':
@@ -248,7 +275,10 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
 
                   if (rowIndex < guesses.length) {
                     letter = guesses[rowIndex][colIndex] || '';
-                    style = getLetterStyle(letter);
+                    const evaluation = guessEvaluations[rowIndex]?.[colIndex];
+                    if (evaluation) {
+                      style = getLetterStyle(letter, evaluation);
+                    }
                   } else if (rowIndex === guesses.length) {
                     letter = currentGuess[colIndex] || '';
                     style = letter ? 'border-2 border-gold-400 bg-red-700/50 backdrop-blur-sm' : 'border-2 border-gold-400/30 bg-red-800/30 backdrop-blur-sm';
