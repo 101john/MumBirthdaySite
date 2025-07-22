@@ -156,7 +156,7 @@ const MiniGames: React.FC<MiniGamesProps> = ({ onGameComplete }) => {
                 `}
                 onClick={() => handleGameSelect(game.id)}
                 style={{ perspective: 1000 }}
-              >
+                >
                 {/* Completion Badge */}
                 {isCompleted && (
                   <motion.div
@@ -198,6 +198,7 @@ const MiniGames: React.FC<MiniGamesProps> = ({ onGameComplete }) => {
                 >
                   {isCompleted ? 'Play Again' : 'Start Game'}
                 </motion.button>
+                </div>
               </motion.div>
             );
           })}
