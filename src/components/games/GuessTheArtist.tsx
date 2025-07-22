@@ -25,8 +25,42 @@ const artistData = [
     imageUrl: '/assets/minigames/guess_the_artist_from_the_painting/frida-khalo.jpg',
     artist: 'Frida Kahlo',
     fact: 'Frida painted 55 self-portraits because she said "I am my own muse, my own subject. I know myself best."'
+  },
+  {
+    id: '4',
+    imageUrl: '/assets/minigames/guess_the_artist_from_the_painting/caravaggio.jpg',
+    artist: 'Caravaggio',
+    fact: 'Caravaggio was known for his dramatic use of light and shadow, a technique called chiaroscuro.'
+  },
+  {
+    id: '5',
+    imageUrl: '/assets/minigames/guess_the_artist_from_the_painting/munch.jpg',
+    artist: 'Edvard Munch',
+    fact: 'Munch\'s "The Scream" is one of the most iconic paintings in art history.'
+  },
+  {
+    id: '6',
+    imageUrl: '/assets/minigames/guess_the_artist_from_the_painting/jmw_turner.jpeg',
+    artist: 'J.M.W. Turner',
+    fact: 'Turner was known as "the painter of light" and is considered a precursor to Impressionism.'
+  },
+  {
+    id: '7',
+    imageUrl: '/assets/minigames/guess_the_artist_from_the_painting/rembrandt.png',
+    artist: 'Rembrandt',
+    fact: 'Rembrandt created over 300 works, including self-portraits that captured his aging process.'
   }
 ];
+
+// Smart shuffle function
+const shuffleArray = (array: any[]) => {
+  return array
+    .map((item) => ({ item, sortKey: Math.random() }))
+    .sort((a, b) => a.sortKey - b.sortKey)
+    .map(({ item }) => item);
+};
+
+const randomizedArtistData = shuffleArray(artistData);
 
 const GuessTheArtist: React.FC<GuessTheArtistProps> = ({ onComplete, onBack }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -37,7 +71,7 @@ const GuessTheArtist: React.FC<GuessTheArtistProps> = ({ onComplete, onBack }) =
   const [gameComplete, setGameComplete] = useState(false);
   const [showHint, setShowHint] = useState(false);
 
-  const currentArtist = artistData[currentIndex];
+  const currentArtist = randomizedArtistData[currentIndex];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +89,7 @@ const GuessTheArtist: React.FC<GuessTheArtistProps> = ({ onComplete, onBack }) =
   };
 
   const handleNext = () => {
-    if (currentIndex < artistData.length - 1) {
+    if (currentIndex < randomizedArtistData.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setUserGuess('');
       setShowResult(false);
@@ -292,7 +326,7 @@ const GuessTheArtist: React.FC<GuessTheArtistProps> = ({ onComplete, onBack }) =
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      {currentIndex < artistData.length - 1 ? 'Next Painting' : 'Finish Game'}
+                      {currentIndex < randomizedArtistData.length - 1 ? 'Next Painting' : 'Finish Game'}
                     </motion.button>
                   </motion.div>
                 )}

@@ -24,10 +24,18 @@ ZINDI — Short for "zindagi" (life), used poetically.
 SHAAN — Pride, grandeur — common in movie titles/names.
 SANAM — Beloved, darling.`;
 
-  return wordsText.split('\n').map(line => {
+  const wordsArray = wordsText.split('\n').map(line => {
     const [word, fact] = line.split(' — ');
     return { word: word.trim(), fact: fact.trim() };
   }).filter(item => item.word && item.fact);
+
+  // Shuffle the array
+  for (let i = wordsArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [wordsArray[i], wordsArray[j]] = [wordsArray[j], wordsArray[i]];
+  }
+
+  return wordsArray;
 };
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');

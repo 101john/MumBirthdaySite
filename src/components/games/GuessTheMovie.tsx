@@ -42,6 +42,12 @@ const movieData = [
   }
 ];
 
+// Shuffle the array
+for (let i = movieData.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [movieData[i], movieData[j]] = [movieData[j], movieData[i]];
+}
+
 const GuessTheMovie: React.FC<GuessTheMovieProps> = ({ onComplete, onBack }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userGuess, setUserGuess] = useState('');
