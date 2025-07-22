@@ -92,7 +92,7 @@ const Hero: React.FC<HeroProps> = ({ onStartJourney }) => {
                 textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(251, 191, 36, 0.3)'
               }}
             >
-              Dear Mum ✨
+                Dear Mother ✨
             </motion.h2>
             <motion.p 
               className="text-xl md:text-2xl text-gold-200 max-w-2xl mx-auto leading-relaxed"
@@ -116,19 +116,21 @@ const Hero: React.FC<HeroProps> = ({ onStartJourney }) => {
           >
             <motion.button
               onClick={onStartJourney}
-              className="px-12 py-6 bg-gradient-to-r from-red-600 to-red-800 text-gold-400 font-bold text-xl rounded-full shadow-xl border-2 border-gold-400 flex items-center gap-4 hover:shadow-2xl transition-all duration-300 mx-auto"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: '0 0 30px rgba(251, 191, 36, 0.5)'
-              }}
+              className="px-10 py-4 bg-gradient-to-r from-amber-500 to-red-600 text-white font-bold text-lg rounded-lg shadow-lg border-2 border-amber-400 hover:shadow-xl transition-all duration-300 mx-auto"
+              whileHover={{ scale: 1.1, boxShadow: '0 0 20px rgba(255, 215, 0, 0.7)' }}
               whileTap={{ scale: 0.95 }}
               style={{
-                textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)'
+                textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
+                backgroundImage: 'linear-gradient(135deg, #fbbf24, #dc2626)',
+                backgroundSize: '200% 200%',
+                animation: 'gradient-shift 3s ease-in-out infinite'
               }}
             >
-              <Sparkles className="w-8 h-8" />
-              Begin Your Journey
-              <Sparkles className="w-8 h-8" />
+              <span className="flex items-center gap-2">
+                <Sparkles className="w-6 h-6" />
+                Start Your Adventure
+                <Sparkles className="w-6 h-6" />
+              </span>
             </motion.button>
           </motion.div>
         </motion.div>
@@ -160,7 +162,7 @@ const Hero: React.FC<HeroProps> = ({ onStartJourney }) => {
         ))}
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes gradient-shift {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
