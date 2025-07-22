@@ -115,7 +115,7 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
     } else if (currentWordData.word.includes(letter)) {
       return 'bg-yellow-600 text-white border-yellow-500 shadow-lg';
     } else {
-      return 'bg-red-800 text-gold-200 border-red-700 shadow-lg';
+      return 'bg-gray-600 text-white border-gray-500 shadow-lg';
     }
   };
 
@@ -127,9 +127,9 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
       case 'present':
         return 'bg-yellow-600 text-white border-yellow-500';
       case 'absent':
-        return 'bg-red-800 text-gold-200 border-red-700';
+        return 'bg-gray-600 text-white border-gray-500';
       default:
-        return 'bg-red-700/50 text-gold-200 border-gold-400/50 hover:bg-red-600/50';
+        return 'bg-gray-500/50 text-white border-gray-400/50 hover:bg-gray-600/50';
     }
   };
 
