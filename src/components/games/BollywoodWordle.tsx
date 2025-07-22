@@ -109,13 +109,17 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
     }
   };
 
-  const getLetterStyle = (letter: string, position: number, word: string) => {
-    if (word[position] === letter) {
-      return 'bg-green-600 text-white border-green-500 shadow-lg';
-    } else if (currentWordData.word.includes(letter)) {
-      return 'bg-yellow-600 text-white border-yellow-500 shadow-lg';
-    } else {
-      return 'bg-gray-600 text-white border-gray-500 shadow-lg';
+  const getLetterStyle = (letter: string) => {
+    const status = usedLetters[letter];
+    switch (status) {
+      case 'correct':
+        return 'bg-green-600 text-white border-green-500 shadow-lg';
+      case 'present':
+        return 'bg-yellow-600 text-white border-yellow-500 shadow-lg';
+      case 'absent':
+        return 'bg-gray-600 text-white border-gray-500 shadow-lg';
+      default:
+        return 'bg-gray-500/50 text-white border-gray-400/50';
     }
   };
 
@@ -235,7 +239,7 @@ const BollywoodWordle: React.FC<BollywoodWordleProps> = ({ onComplete, onBack })
 
                   if (rowIndex < guesses.length) {
                     letter = guesses[rowIndex][colIndex] || '';
-                    style = getLetterStyle(letter, colIndex, guesses[rowIndex]);
+                    style = getLetterStyle(letter);
                   } else if (rowIndex === guesses.length) {
                     letter = currentGuess[colIndex] || '';
                     style = letter ? 'border-2 border-gold-400 bg-red-700/50 backdrop-blur-sm' : 'border-2 border-gold-400/30 bg-red-800/30 backdrop-blur-sm';
