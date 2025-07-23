@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "title": "Tujhe Dekha Toh",
+    "artist": "Lata Mangeshkar & Kumar Sanu",
+    "duration": "4:45",
+    "url": "/assets/background_music/tujhe_dekha_toh.mp3",
+    "albumCover": "assets/movie_posters/DDLJ_movie_poster.jpg"
+  },
+  {
+    "id": "2",
+    "title": "Mehndi Laga Ke",
+    "artist": "Udit Narayan & Alka Yagnik",
+    "duration": "3:50",
+    "url": "/assets/background_music/mehndi_laga_ke.mp3",
+    "albumCover": "assets/movie_posters/DDLJ_movie_poster.jpg"
+  },
+  {
+    "id": "3",
+    "title": "Mere Khwabon Mein",
+    "artist": "Lata Mangeshkar & Udit Narayan",
+    "duration": "3:57",
+    "url": "/assets/background_music/mere_khwabon_mein.mp3",
+    "albumCover": "assets/movie_posters/DDLJ_movie_poster.jpg"
+  },
+  {
+    "id": "4",
+    "title": "Ho Gaya Hai",
+    "artist": "Udit Narayan & Alka Yagnik",
+    "duration": "4:10",
+    "url": "/assets/background_music/ho_gaya_hai.mp3",
+    "albumCover": "assets/movie_posters/DDLJ_movie_poster.jpg"
+  },
+  {
+    "id": "5",
+    "title": "Ghar Aaja",
+    "artist": "Lata Mangeshkar",
+    "duration": "3:30",
+    "url": "/assets/background_music/ghar_aaja.mp3",
+    "albumCover": "assets/movie_posters/DDLJ_movie_poster.jpg"
+  },
+  {
+    "id": "6",
+    "title": "Ruk Ja",
+    "artist": "Udit Narayan",
+    "duration": "4:00",
+    "url": "/assets/background_music/ruk_ja.mp3",
+    "albumCover": "assets/movie_posters/DDLJ_movie_poster.jpg"
+  },
+  {
+    "id": "7",
+    "title": "Chasing Cars",
+    "artist": "Snow Patrol",
+    "duration": "3:30",
+    "url": "/assets/background_music/ruk_ja.mp3",
+    "albumCover": ""
+  }
+]

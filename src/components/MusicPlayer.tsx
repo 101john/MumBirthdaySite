@@ -1,29 +1,38 @@
 import { motion } from 'framer-motion';
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Heart, Music } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
-
-interface Track {
-  id: string;
-  title: string;
-  artist: string;
-  duration: string;
-  url: string;
-}
+import { useState, useRef, useEffect, useMemo } from 'react';
+import playlist from '../data/playlist.json';
 
 interface MusicPlayerProps {
-  tracks: Track[];
+  currentTrack: {
+    id: string;
+    title: string;
+    artist: string;
+    duration: string;
+    url: string;
+    albumCover: string;
+  } | null;
+  onSync: (track: any) => void;
+  isPlaying: boolean;
+  onTogglePlay: () => void;
 }
 
-const MusicPlayer: React.FC<MusicPlayerProps> = ({ tracks }) => {
+const MusicPlayer: React.FC<MusicPlayerProps> = ({ currentTrack, onSync, isPlaying, onTogglePlay }) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(0.7);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const currentTrack = tracks[currentTrackIndex];
+  const shuffledPlaylist = useMemo(() => {
+    const shuffled = [...playlist];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, []);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -36,12 +45,20 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ tracks }) => {
     audio.addEventListener('loadedmetadata', updateDuration);
     audio.addEventListener('ended', handleNext);
 
+    audio.volume = volume;
+
+    if (isPlaying) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
       audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('ended', handleNext);
     };
-  }, [currentTrackIndex]);
+  }, [currentTrackIndex, volume, isPlaying]);
 
   const handlePlayPause = () => {
     const audio = audioRef.current;
@@ -52,17 +69,19 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ tracks }) => {
     } else {
       audio.play();
     }
-    setIsPlaying(!isPlaying);
+    onTogglePlay();
   };
 
   const handleNext = () => {
-    setCurrentTrackIndex((prev) => (prev + 1) % tracks.length);
-    setIsPlaying(true);
+    const nextIndex = (currentTrackIndex + 1) % shuffledPlaylist.length;
+    setCurrentTrackIndex(nextIndex);
+    onSync(shuffledPlaylist[nextIndex]);
   };
 
   const handlePrevious = () => {
-    setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length);
-    setIsPlaying(true);
+    const prevIndex = (currentTrackIndex - 1 + shuffledPlaylist.length) % shuffledPlaylist.length;
+    setCurrentTrackIndex(prevIndex);
+    onSync(shuffledPlaylist[prevIndex]);
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,8 +123,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ tracks }) => {
 
       <audio
         ref={audioRef}
-        src={currentTrack?.url}
-        volume={volume}
+        src={currentTrack?.url || shuffledPlaylist[currentTrackIndex].url}
         muted={isMuted}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
@@ -279,7 +297,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ tracks }) => {
         >
           <h3 className="text-2xl font-bold text-gold-400 mb-6 font-serif">Playlist</h3>
           <div className="space-y-4">
-            {tracks.map((track, index) => (
+            {shuffledPlaylist.map((track: { id: string; title: string; artist: string; duration: string; url: string; albumCover: string }, index: number) => (
               <motion.div
                 key={track.id}
                 onClick={() => setCurrentTrackIndex(index)}
