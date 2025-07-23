@@ -103,7 +103,7 @@ const Hero: React.FC<HeroProps> = ({ onStartJourney }) => {
                 textShadow: '1px 1px 2px rgba(0, 0, 0, 0.7)'
               }}
             >
-              A journey through memories, movies, and moments that celebrate the incredible woman you are
+              A journey through memories, movies, and games, because you feed us.
             </motion.p>
           </div>
 
@@ -128,36 +128,59 @@ const Hero: React.FC<HeroProps> = ({ onStartJourney }) => {
             >
               <span className="flex items-center gap-2">
                 <Sparkles className="w-6 h-6" />
-                Start Your Adventure
+                Don't Get Your Hopes Up
                 <Sparkles className="w-6 h-6" />
               </span>
             </motion.button>
           </motion.div>
         </motion.div>
 
-        {/* Floating Ornamental Elements */}
-        {[...Array(8)].map((_, i) => (
+        {/* Floating Memory Images */}
+        {[
+          'IMG-20250722-WA0007.jpg',
+          'IMG-20250722-WA0012.jpg',
+          'IMG-20250722-WA0015.jpg',
+          'IMG-20250722-WA0019.jpg',
+          'IMG-20250722-WA0023.jpg',
+          'IMG-20250722-WA0028.jpg',
+          'IMG-20250722-WA0032.jpg',
+          'IMG-20250722-WA0036.jpg',
+        ].map((imageName, i) => (
           <motion.div
             key={i}
-            className="absolute text-gold-400 text-3xl opacity-60"
+            className="absolute pointer-events-none"
             style={{
-              left: `${10 + Math.random() * 80}%`,
-              top: `${10 + Math.random() * 80}%`,
+              left: `${15 + Math.random() * 70}%`,
+              top: `${15 + Math.random() * 70}%`,
+              zIndex: 5,
+              perspective: '1000px'
             }}
+            initial={{ opacity: 0, scale: 0.8 }}
             animate={{
-              y: [-20, -60, -20],
-              opacity: [0.3, 0.8, 0.3],
-              scale: [0.8, 1.2, 0.8],
-              rotate: [0, 180, 360]
+              y: [-10, 10, -10],
+              x: [-5, 5, -5],
+              rotateX: [-2, 2, -2],
+              rotateY: [-3, 3, -3],
+              opacity: [0.2, 0.4, 0.2],
+              scale: [0.8, 0.85, 0.8],
             }}
             transition={{
-              duration: 6 + Math.random() * 4,
+              duration: 12 + Math.random() * 8,
               repeat: Infinity,
-              delay: i * 0.8,
+              delay: i * 1.5,
               ease: "easeInOut"
             }}
           >
-            {['🪷', '🕉️', '✨', '🌟', '💫', '🔱', '🪔', '🌺', '🎇'][i]}
+            <img 
+              src={`/assets/images/${imageName}`}
+              alt=""
+              className="w-32 h-32 object-cover rounded-xl"
+              style={{
+                border: '3px solid rgba(251, 191, 36, 0.2)',
+                boxShadow: '0 0 20px rgba(251, 191, 36, 0.1)',
+                filter: 'brightness(0.9) contrast(1.1)'
+              }}
+            />
           </motion.div>
         ))}
       </div>
