@@ -145,82 +145,73 @@ const Hero: React.FC<HeroProps> = ({ onStartJourney }) => {
           'IMG-20250722-WA0028.jpg',
           'IMG-20250722-WA0032.jpg',
           'IMG-20250722-WA0036.jpg',
+          'IMG-20250722-WA0008.jpg',
+          'IMG-20250722-WA0010.jpg',
+          'IMG-20250722-WA0011.jpg',
+          'IMG-20250722-WA0013.jpg',
+          'IMG-20250722-WA0016.jpg',
+          'IMG-20250722-WA0020.jpg',
+          'IMG-20250722-WA0024.jpg',
+          'IMG-20250722-WA0027.jpg',
         ].map((imageName, i) => {
-          // Calculate random positions that strictly avoid the center area
-          const getPosition = () => {
-            // Define the safe zones - completely away from the center
-            const position = {
-              left: '0%',
-              top: '0%'
-            };
-
-            // Determine vertical position first
-            const verticalZone = Math.random() * 100;
-            if (verticalZone < 33) {
-              // Top zone - 0% to 25%
-              position.top = `${Math.random() * 20}%`;
-            } else if (verticalZone < 66) {
-              // Middle zones - but only far sides
-              position.top = `${35 + Math.random() * 30}%`;
-            } else {
-              // Bottom zone - 75% to 100%
-              position.top = `${80 + Math.random() * 20}%`;
-            }
-
-            // Determine horizontal position
-            const side = Math.random() > 0.5;
-            if (side) {
-              // Right side - 70% to 95%
-              position.left = `${70 + Math.random() * 25}%`;
-            } else {
-              // Left side - 5% to 30%
-              position.left = `${5 + Math.random() * 25}%`;
-            }
-
-            return position;
-          };
-
-          const position = getPosition();
+          // Generate random positions avoiding the center (30% to 70%)
+          const isLeftSide = Math.random() < 0.5;
+          const startX = isLeftSide ? 
+            Math.random() * 25 : // Left side
+            75 + Math.random() * 25; // Right side
+          
+          const startY = 5 + Math.random() * 90; // Keep away from very top/bottom
+          
+          // More varied velocities based on position
+          const velocityX = (Math.random() - 0.5) * (isLeftSide ? 50 : -50); // Move toward opposite side
+          const velocityY = (Math.random() - 0.5) * 60; // More vertical movement
+          
+          // Randomize image size for variety
+          const imageSize = Math.random() < 0.3 ? 'small' : 'normal';
           
           return (
             <motion.div
               key={i}
               className="absolute pointer-events-none"
               style={{
-                left: position.left,
-                top: position.top,
+                left: `${startX}%`,
+                top: `${startY}%`,
                 zIndex: 5,
                 perspective: '1000px'
               }}
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{
-                y: [
-                  -20 + Math.random() * 40,
-                  20 + Math.random() * 40,
-                  -10 + Math.random() * 20
-                ],
-                x: [
-                  -30 + Math.random() * 60,
-                  30 + Math.random() * 60,
-                  -15 + Math.random() * 30
-                ],
-                rotateX: [-5 + Math.random() * 10, 5 + Math.random() * 10, -2 + Math.random() * 4],
-                rotateY: [-8 + Math.random() * 16, 8 + Math.random() * 16, -4 + Math.random() * 8],
-                opacity: [0.2, 0.75, 0.2],
-                scale: [0.75, 0.85, 0.75],
+                x: [startX, startX + velocityX, startX + velocityX * 0.5, startX],
+                y: [startY, startY + velocityY, startY + velocityY * 0.7, startY],
+                rotateX: [-3, 3, -3, 0],
+                rotateY: [-3, 3, -3, 0],
+                opacity: [0.4, 0.7, 0.7, 0.4],
+                scale: [0.85, 1, 0.95, 0.85],
               }}
               transition={{
-                duration: 20,
+                duration: 15 + Math.random() * 10, // Random duration for more natural feel
                 repeat: Infinity,
-                delay: i * 3.5,
+                delay: i * 0.5, // Faster initial appearance
                 ease: "easeInOut",
-                times: [0, 0.5, 1]
+                times: [0, 0.3, 0.7, 1], // More control points for smoother movement
+                // Separate controls for each property
+                opacity: {
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: i * 0.5
+                },
+                scale: {
+                  duration: 12,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }
               }}
             >
               <img 
                 src={`/assets/images/${imageName}`}
                 alt=""
-                className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-xl"
+                className={`${imageSize === 'small' ? 'w-20 h-20 md:w-24 md:h-24' : 'w-24 h-24 md:w-32 md:h-32'} object-cover rounded-xl`}
                 style={{
                   border: '2px solid rgba(251, 191, 36, 0.3)',
                   boxShadow: '0 0 30px rgba(251, 191, 36, 0.15)',
