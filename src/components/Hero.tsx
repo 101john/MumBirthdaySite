@@ -145,44 +145,91 @@ const Hero: React.FC<HeroProps> = ({ onStartJourney }) => {
           'IMG-20250722-WA0028.jpg',
           'IMG-20250722-WA0032.jpg',
           'IMG-20250722-WA0036.jpg',
-        ].map((imageName, i) => (
-          <motion.div
-            key={i}
-            className="absolute pointer-events-none"
-            style={{
-              left: `${15 + Math.random() * 70}%`,
-              top: `${15 + Math.random() * 70}%`,
-              zIndex: 5,
-              perspective: '1000px'
-            }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{
-              y: [-10, 10, -10],
-              x: [-5, 5, -5],
-              rotateX: [-2, 2, -2],
-              rotateY: [-3, 3, -3],
-              opacity: [0.2, 0.4, 0.2],
-              scale: [0.8, 0.85, 0.8],
-            }}
-            transition={{
-              duration: 12 + Math.random() * 8,
-              repeat: Infinity,
-              delay: i * 1.5,
-              ease: "easeInOut"
-            }}
-          >
-            <img 
-              src={`/assets/images/${imageName}`}
-              alt=""
-              className="w-32 h-32 object-cover rounded-xl"
+        ].map((imageName, i) => {
+          // Calculate random positions that strictly avoid the center area
+          const getPosition = () => {
+            // Define the safe zones - completely away from the center
+            const position = {
+              left: '0%',
+              top: '0%'
+            };
+
+            // Determine vertical position first
+            const verticalZone = Math.random() * 100;
+            if (verticalZone < 33) {
+              // Top zone - 0% to 25%
+              position.top = `${Math.random() * 20}%`;
+            } else if (verticalZone < 66) {
+              // Middle zones - but only far sides
+              position.top = `${35 + Math.random() * 30}%`;
+            } else {
+              // Bottom zone - 75% to 100%
+              position.top = `${80 + Math.random() * 20}%`;
+            }
+
+            // Determine horizontal position
+            const side = Math.random() > 0.5;
+            if (side) {
+              // Right side - 70% to 95%
+              position.left = `${70 + Math.random() * 25}%`;
+            } else {
+              // Left side - 5% to 30%
+              position.left = `${5 + Math.random() * 25}%`;
+            }
+
+            return position;
+          };
+
+          const position = getPosition();
+          
+          return (
+            <motion.div
+              key={i}
+              className="absolute pointer-events-none"
               style={{
-                border: '3px solid rgba(251, 191, 36, 0.2)',
-                boxShadow: '0 0 20px rgba(251, 191, 36, 0.1)',
-                filter: 'brightness(0.9) contrast(1.1)'
+                left: position.left,
+                top: position.top,
+                zIndex: 5,
+                perspective: '1000px'
               }}
-            />
-          </motion.div>
-        ))}
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{
+                y: [
+                  -20 + Math.random() * 40,
+                  20 + Math.random() * 40,
+                  -10 + Math.random() * 20
+                ],
+                x: [
+                  -30 + Math.random() * 60,
+                  30 + Math.random() * 60,
+                  -15 + Math.random() * 30
+                ],
+                rotateX: [-5 + Math.random() * 10, 5 + Math.random() * 10, -2 + Math.random() * 4],
+                rotateY: [-8 + Math.random() * 16, 8 + Math.random() * 16, -4 + Math.random() * 8],
+                opacity: [0.2, 0.75, 0.2],
+                scale: [0.75, 0.85, 0.75],
+              }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                delay: i * 3.5,
+                ease: "easeInOut",
+                times: [0, 0.5, 1]
+              }}
+            >
+              <img 
+                src={`/assets/images/${imageName}`}
+                alt=""
+                className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-xl"
+                style={{
+                  border: '2px solid rgba(251, 191, 36, 0.3)',
+                  boxShadow: '0 0 30px rgba(251, 191, 36, 0.15)',
+                  filter: 'brightness(0.95) contrast(1.1) sepia(0.05)'
+                }}
+              />
+            </motion.div>
+          );
+        })}
       </div>
 
       <style>{`

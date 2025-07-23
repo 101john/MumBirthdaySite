@@ -12,12 +12,12 @@ const Celebration: React.FC<CelebrationProps> = ({ totalScore, completedActiviti
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
 
   const messages = [
-    "You are the most amazing mum in the world! ✨",
-    "Your love and warmth light up our lives every single day 💖",
-    "Thank you for all the beautiful memories and moments 🌟",
-    "Here's to another year of your incredible journey! 🎂",
-    "You deserve all the happiness and joy in the world 🌸",
-    "Happy Birthday to our superstar! 🎉"
+    "You are a pretty good mum 🙃",
+    "Your love and warmth light up our lives every single day 💖. HOLY YAP",
+    "Thank you for paying our school fees",
+    "We would be obese without you 🎂",
+    "Have a good day. 🎇",
+    "Happy Birthday."
   ];
 
   useEffect(() => {
@@ -183,15 +183,15 @@ const Celebration: React.FC<CelebrationProps> = ({ totalScore, completedActiviti
             <h3 className="text-3xl font-bold text-gold-400 mb-6 font-serif">Special Birthday Wishes</h3>
             <div className="grid md:grid-cols-3 gap-6 text-lg text-gold-200">
               <div className="text-center">
-                <div className="text-4xl mb-3">🌟</div>
+                <div className="text-4xl mb-3">👩🏿‍🍳</div>
                 <p>May your year be filled with countless magical moments</p>
               </div>
               <div className="text-center">
-                <div className="text-4xl mb-3">💝</div>
+                <div className="text-4xl mb-3">👽🦧</div>
                 <p>Wishing you endless joy, love, and beautiful surprises</p>
               </div>
               <div className="text-center">
-                <div className="text-4xl mb-3">🌈</div>
+                <div className="text-4xl mb-3">💀🌈🤺🤺</div>
                 <p>Here's to new adventures and wonderful memories ahead</p>
               </div>
             </div>
@@ -210,7 +210,7 @@ const Celebration: React.FC<CelebrationProps> = ({ totalScore, completedActiviti
             </h3>
             <p className="text-xl text-gold-200 leading-relaxed max-w-2xl mx-auto">
               This website is just a small token of the immense love and gratitude we have for you. 
-              You make every day brighter with your presence, and we're so blessed to have you in our lives.
+              You make every day brighter with your presence, and we're so blessed to have you in our lives. 🫥😀
             </p>
             <div className="mt-6 flex justify-center gap-2">
               {[...Array(5)].map((_, i) => (
