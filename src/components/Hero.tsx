@@ -135,83 +135,53 @@ const Hero: React.FC<HeroProps> = ({ onStartJourney }) => {
           </motion.div>
         </motion.div>
 
-        {/* Floating Memory Images */}
+        {/* Static Fading Memory Images */}
         {[
-          'IMG-20250722-WA0007.jpg',
-          'IMG-20250722-WA0012.jpg',
-          'IMG-20250722-WA0015.jpg',
-          'IMG-20250722-WA0019.jpg',
-          'IMG-20250722-WA0023.jpg',
-          'IMG-20250722-WA0028.jpg',
-          'IMG-20250722-WA0032.jpg',
-          'IMG-20250722-WA0036.jpg',
-          'IMG-20250722-WA0008.jpg',
-          'IMG-20250722-WA0010.jpg',
-          'IMG-20250722-WA0011.jpg',
-          'IMG-20250722-WA0013.jpg',
-          'IMG-20250722-WA0016.jpg',
-          'IMG-20250722-WA0020.jpg',
-          'IMG-20250722-WA0024.jpg',
-          'IMG-20250722-WA0027.jpg',
-        ].map((imageName, i) => {
-          // Generate random positions avoiding the center (30% to 70%)
-          const isLeftSide = Math.random() < 0.5;
-          const startX = isLeftSide ? 
-            Math.random() * 25 : // Left side
-            75 + Math.random() * 25; // Right side
-          
-          const startY = 5 + Math.random() * 90; // Keep away from very top/bottom
-          
-          // More varied velocities based on position
-          const velocityX = (Math.random() - 0.5) * (isLeftSide ? 50 : -50); // Move toward opposite side
-          const velocityY = (Math.random() - 0.5) * 60; // More vertical movement
-          
-          // Randomize image size for variety
-          const imageSize = Math.random() < 0.3 ? 'small' : 'normal';
-          
+          { x: 10, y: 20 },
+          { x: 80, y: 25 },
+          { x: 15, y: 70 },
+          { x: 85, y: 75 },
+          { x: 5, y: 45 },
+          { x: 90, y: 50 },
+        ].map((position, i) => {
+          const images = [
+            'IMG-20250722-WA0007.jpg',
+            'IMG-20250722-WA0012.jpg',
+            'IMG-20250722-WA0015.jpg',
+            'IMG-20250722-WA0019.jpg',
+            'IMG-20250722-WA0023.jpg',
+            'IMG-20250722-WA0028.jpg',
+            'IMG-20250722-WA0032.jpg',
+            'IMG-20250722-WA0036.jpg',
+            'IMG-20250722-WA0008.jpg',
+            'IMG-20250722-WA0010.jpg',
+          ];
+
           return (
             <motion.div
               key={i}
               className="absolute pointer-events-none"
               style={{
-                left: `${startX}%`,
-                top: `${startY}%`,
-                zIndex: 5,
-                perspective: '1000px'
+                left: `${position.x}%`,
+                top: `${position.y}%`,
+                zIndex: 5
               }}
-              initial={{ opacity: 0, scale: 0.7 }}
+              initial={{ opacity: 0 }}
               animate={{
-                x: [startX, startX + velocityX, startX + velocityX * 0.5, startX],
-                y: [startY, startY + velocityY, startY + velocityY * 0.7, startY],
-                rotateX: [-3, 3, -3, 0],
-                rotateY: [-3, 3, -3, 0],
-                opacity: [0.4, 0.7, 0.7, 0.4],
-                scale: [0.85, 1, 0.95, 0.85],
+                opacity: [0, 0.7, 0.7, 0]
               }}
               transition={{
-                duration: 15 + Math.random() * 10, // Random duration for more natural feel
+                duration: 8,
                 repeat: Infinity,
-                delay: i * 0.5, // Faster initial appearance
-                ease: "easeInOut",
-                times: [0, 0.3, 0.7, 1], // More control points for smoother movement
-                // Separate controls for each property
-                opacity: {
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: i * 0.5
-                },
-                scale: {
-                  duration: 12,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }
+                delay: i * 1.5,
+                times: [0, 0.1, 0.9, 1],
+                ease: "easeInOut"
               }}
             >
-              <img 
-                src={`/assets/images/${imageName}`}
+              <motion.img 
+                src={`/assets/images/${images[Math.floor((Date.now() / 8000 + i) % images.length)]}`}
                 alt=""
-                className={`${imageSize === 'small' ? 'w-20 h-20 md:w-24 md:h-24' : 'w-24 h-24 md:w-32 md:h-32'} object-cover rounded-xl`}
+                className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-xl"
                 style={{
                   border: '2px solid rgba(251, 191, 36, 0.3)',
                   boxShadow: '0 0 30px rgba(251, 191, 36, 0.15)',
